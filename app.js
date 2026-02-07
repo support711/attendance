@@ -9,6 +9,19 @@ app.use(express.urlencoded({ extended: false }));
 // Store attendance logs in memory
 const attendanceLogs = [];
 
+app.use((req, res, next) => {
+  console.log("====== INCOMING REQUEST ======");
+  console.log("TIME:", new Date().toISOString());
+  console.log("IP:", req.headers["x-forwarded-for"] || req.socket.remoteAddress);
+  console.log("METHOD:", req.method);
+  console.log("URL:", req.originalUrl);
+  console.log("HEADERS:", req.headers);
+  console.log("QUERY:", req.query);
+  console.log("BODY:", req.body);
+  console.log("==============================");
+  next();
+});
+
 /**
  * Device sends logs here:
  * GET or POST /iclock/cdata?SN=XXXX&table=ATTLOG&Stamp=12345
@@ -57,6 +70,11 @@ app.get("/api/attlogs", (req, res) => {
     total: attendanceLogs.length,
     data: attendanceLogs.slice(-200),
   });
+});
+
+app.all("*", (req, res) => {
+  console.log("❌ UNKNOWN URL HIT:", req.method, req.originalUrl);
+  res.status(200).send("OK");
 });
 
 app.listen(PORT, "0.0.0.0", () => {
