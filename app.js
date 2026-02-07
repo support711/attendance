@@ -72,8 +72,8 @@ app.get("/api/attlogs", (req, res) => {
   });
 });
 
-app.all("*", (req, res) => {
-  console.log("❌ UNKNOWN URL HIT:", req.method, req.originalUrl);
+app.all(/.*/, (req, res) => {
+  console.log("UNKNOWN:", req.method, req.originalUrl);
   res.status(200).send("OK");
 });
 
