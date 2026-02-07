@@ -9,6 +9,17 @@ const server = app.listen(port, () => console.log(`Example app listening on port
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
 
+app.post("/submit", (req, res) => {
+  const data = req; // JSON payload from client
+  console.log("Received data:", data);
+  
+  // Respond back with the same data and a message
+  res.json({
+    message: "Data received successfully!",
+    received: data
+  });
+});
+
 const html = `
 <!DOCTYPE html>
 <html>
